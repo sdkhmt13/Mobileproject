@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mobileproject.viewmodel.SearchViewModel
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.TextButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,13 +76,19 @@ fun SearchScreen(
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(results, key = { it.id }) { book ->
-                        Column(
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 8.dp)
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(book.title)
-                            Text(book.author)
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(book.title)
+                                Text(book.author)
+                            }
+                            TextButton(onClick = { viewModel.addToShelf(book) }) {
+                                Text("Add")
+                            }
                         }
                     }
                 }
