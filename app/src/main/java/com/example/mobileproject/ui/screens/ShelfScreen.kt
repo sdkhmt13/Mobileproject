@@ -2,6 +2,7 @@ package com.example.mobileproject.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.mobileproject.data.ReadingStatus
 import com.example.mobileproject.viewmodel.ShelfViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,6 +30,7 @@ fun ShelfScreen(
     onSearchClick: () -> Unit
 ) {
     val books by viewModel.books.collectAsStateWithLifecycle()
+    val filter by viewModel.filter.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -35,30 +39,61 @@ fun ShelfScreen(
             )
         }
     ) { innerPadding ->
-        if (books.isEmpty()) {
-            Box(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
             ) {
-                Text("Shelf is empty")
+                FilterChip(
+                    selected = filter == null,
+                    onClick = { viewModel.setFilter(null) },
+                    label = { Text("All") }
+                )
+                FilterChip(
+                    selected = filter == ReadingStatus.WANT,
+                    onClick = { viewModel.setFilter(ReadingStatus.WANT) },
+                    label = { Text("Want") }
+                )
+                FilterChip(
+                    selected = filter == ReadingStatus.READING,
+                    onClick = { viewModel.setFilter(ReadingStatus.READING) },
+                    label = { Text("Reading") }
+                )
+                FilterChip(
+                    selected = filter == ReadingStatus.DONE,
+                    onClick = { viewModel.setFilter(ReadingStatus.DONE) },
+                    label = { Text("Done") }
+                )
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(books, key = { it.id }) { book ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                    ) {
-                        Text(book.title)
-                        Text(book.author)
+
+            if (books.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Shelf is empty")
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    items(books, key = { it.id }) { book ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp)
+                        ) {
+                            Text(book.title)
+                            Text(book.author)
+                        }
                     }
                 }
             }
