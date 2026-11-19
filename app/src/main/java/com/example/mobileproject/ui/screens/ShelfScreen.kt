@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mobileproject.data.ReadingStatus
 import com.example.mobileproject.viewmodel.ShelfViewModel
+import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,7 +78,16 @@ fun ShelfScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Shelf is empty")
+                    Text(
+                        text = when (filter) {
+                            null -> "Your shelf is empty.\nTap + to add a book."
+                            ReadingStatus.WANT -> "No books in your wishlist yet."
+                            ReadingStatus.READING -> "You are not reading anything right now."
+                            ReadingStatus.DONE -> "You have not finished any books yet."
+                        },
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(32.dp)
+                    )
                 }
             } else {
                 LazyColumn(
