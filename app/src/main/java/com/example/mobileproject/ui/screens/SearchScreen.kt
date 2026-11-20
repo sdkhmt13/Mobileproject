@@ -71,7 +71,13 @@ fun SearchScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Search for books")
+                    Text(
+                        text = if (query.isBlank()) {
+                            "Type a title or author to search."
+                        } else {
+                            "No books found for \"$query\"."
+                        }
+                    )
                 }
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
