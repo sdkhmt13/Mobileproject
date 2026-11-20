@@ -22,6 +22,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mobileproject.data.ReadingStatus
 import com.example.mobileproject.viewmodel.ShelfViewModel
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,13 +98,22 @@ fun ShelfScreen(
                         .padding(horizontal = 16.dp)
                 ) {
                     items(books, key = { it.id }) { book ->
-                        Column(
+                        Card(
+                            onClick = { onBookClick(book.id) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 8.dp)
+                                .padding(vertical = 6.dp)
                         ) {
-                            Text(book.title)
-                            Text(book.author)
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = book.title,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = book.author,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
                         }
                     }
                 }

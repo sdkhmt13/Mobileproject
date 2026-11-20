@@ -26,6 +26,8 @@ import com.example.mobileproject.viewmodel.SearchViewModel
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.TextButton
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,18 +95,28 @@ fun SearchScreen(
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(results, key = { it.id }) { book ->
-                        Row(
+                        Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                                .padding(vertical = 6.dp)
                         ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(book.title)
-                                Text(book.author)
-                            }
-                            TextButton(onClick = { viewModel.addToShelf(book) }) {
-                                Text("Add")
+                            Row(
+                                modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = book.title,
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    Text(
+                                        text = book.author,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                                TextButton(onClick = { viewModel.addToShelf(book) }) {
+                                    Text("Add")
+                                }
                             }
                         }
                     }
