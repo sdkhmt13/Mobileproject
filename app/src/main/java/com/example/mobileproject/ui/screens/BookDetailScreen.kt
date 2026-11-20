@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mobileproject.viewmodel.BookDetailViewModel
+import com.example.mobileproject.ui.components.StatusChips
 
 @Composable
 fun BookDetailScreen(
@@ -40,7 +41,15 @@ fun BookDetailScreen(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
             Text(current.description, style = MaterialTheme.typography.bodyLarge)
+
+            Text("Status", style = MaterialTheme.typography.labelLarge)
+            StatusChips(
+                selected = current.status,
+                onSelect = { status -> status?.let { viewModel.changeStatus(it) } },
+                showAll = false
+            )
         }
     }
 }
