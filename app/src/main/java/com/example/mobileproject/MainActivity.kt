@@ -37,7 +37,8 @@ fun AppPreview() {
 fun BookDetailPreview() {
     MobileprojectTheme {
         BookDetailScreen(
-            viewModel = BookDetailViewModel(InMemoryBookRepository(), "1")
+            viewModel = BookDetailViewModel(InMemoryBookRepository(), "1"),
+            onBack = {}
         )
     }
 }

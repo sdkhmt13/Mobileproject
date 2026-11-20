@@ -42,7 +42,10 @@ fun AppNavHost(repository: BookRepository) {
             val bookId = backStackEntry.arguments?.getString("bookId") ?: return@composable
             val detailViewModel: BookDetailViewModel =
                 viewModel(factory = ViewModelFactory(repository, bookId))
-            BookDetailScreen(viewModel = detailViewModel)
+            BookDetailScreen(
+                viewModel = detailViewModel,
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
