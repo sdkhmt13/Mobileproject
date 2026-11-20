@@ -24,6 +24,10 @@ import com.example.mobileproject.viewmodel.ShelfViewModel
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +44,12 @@ fun ShelfScreen(
             CenterAlignedTopAppBar(
                 title = { Text("My Shelf") }
             )
+        },
+
+        floatingActionButton = {
+            FloatingActionButton(onClick = onSearchClick) {
+                Icon(Icons.Filled.Add, contentDescription = "Add book")
+            }
         }
     ) { innerPadding ->
         Column(
