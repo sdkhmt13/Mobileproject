@@ -1,15 +1,6 @@
 package com.example.mobileproject.ui.navigation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,7 +9,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mobileproject.data.BookRepository
 import com.example.mobileproject.ui.screens.BookDetailScreen
+import com.example.mobileproject.ui.screens.SearchScreen
+import com.example.mobileproject.ui.screens.ShelfScreen
 import com.example.mobileproject.viewmodel.BookDetailViewModel
+import com.example.mobileproject.viewmodel.SearchViewModel
+import com.example.mobileproject.viewmodel.ShelfViewModel
 import com.example.mobileproject.viewmodel.ViewModelFactory
 
 @Composable
@@ -30,8 +25,21 @@ fun AppNavHost(repository: BookRepository) {
         startDestination = Screen.Shelf.route
     ) {
         composable(Screen.Shelf.route) {
-            TemporaryShelfScreen(
-                onOpenBook = { id -> navController.navigate(Screen.Detail.createRoute(id)) }
+            val shelfViewModel: ShelfViewModel =
+                viewModel(factory = ViewModelFactory(repository))
+            ShelfScreen(
+                viewModel = shelfViewModel,
+                onBookClick = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
+                onSearchClick = { navController.navigate(Screen.Search.route) }
+            )
+        }
+
+        composable(Screen.Search.route) {
+            val searchViewModel: SearchViewModel =
+                viewModel(factory = ViewModelFactory(repository))
+            SearchScreen(
+                viewModel = searchViewModel,
+                onBack = { navController.popBackStack() }
             )
         }
 
@@ -46,25 +54,6 @@ fun AppNavHost(repository: BookRepository) {
                 viewModel = detailViewModel,
                 onBack = { navController.popBackStack() }
             )
-        }
-    }
-}
-
-// Temporary: will be replaced by B's ShelfScreen
-@Composable
-private fun TemporaryShelfScreen(onOpenBook: (String) -> Unit) {
-    Scaffold { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text("Temporary screen until ShelfScreen is ready")
-            Button(onClick = { onOpenBook("1") }) { Text("Open book 1") }
-            Button(onClick = { onOpenBook("2") }) { Text("Open book 2") }
-            Button(onClick = { onOpenBook("999") }) { Text("Open missing book") }
         }
     }
 }
