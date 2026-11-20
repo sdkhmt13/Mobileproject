@@ -7,7 +7,7 @@ Built with Kotlin and Jetpack Compose for the CSS 216 Mobile Application Develop
 ## Group members
 
 - Azat Seidakhmet— data layer and ViewModels
-- Serikbol Askar — Shelf and Search screens
+- Serikbol Askar — Shelf and Search screens, book list with status filters,search screen
 - Altynay Ibrayeva — navigation, Book Detail screen, reusable components, theme
 
 ## Main features
