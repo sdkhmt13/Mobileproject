@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mobileproject.ui.components.StatusChips
 import com.example.mobileproject.viewmodel.BookDetailViewModel
+import androidx.compose.material.icons.filled.Delete
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +40,16 @@ fun BookDetailScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    if (book != null) {
+                        IconButton(onClick = {
+                            viewModel.remove()
+                            onBack()
+                        }) {
+                            Icon(Icons.Filled.Delete, contentDescription = "Delete book")
+                        }
                     }
                 }
             )
