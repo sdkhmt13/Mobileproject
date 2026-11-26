@@ -41,6 +41,7 @@ fun SearchScreen(
 ) {
     val query by viewModel.query.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val shelfIds by viewModel.shelfIds.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -124,8 +125,12 @@ fun SearchScreen(
                             book = book,
                             showStatus = false,
                             trailingContent = {
-                                TextButton(onClick = { viewModel.addToShelf(book) }) {
-                                    Text("Add")
+                                val added = book.id in shelfIds
+                                TextButton(
+                                    onClick = { viewModel.addToShelf(book) },
+                                    enabled = !added
+                                ) {
+                                    Text(if (added) "Added" else "Add")
                                 }
                             }
                         )
