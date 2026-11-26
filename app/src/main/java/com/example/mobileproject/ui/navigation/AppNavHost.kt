@@ -10,15 +10,18 @@ import androidx.navigation.navArgument
 import com.example.mobileproject.AppContainer
 import com.example.mobileproject.ui.screens.BookDetailScreen
 import com.example.mobileproject.ui.screens.SearchScreen
+import com.example.mobileproject.ui.screens.SettingsScreen
 import com.example.mobileproject.ui.screens.ShelfScreen
 import com.example.mobileproject.viewmodel.BookDetailViewModel
 import com.example.mobileproject.viewmodel.SearchViewModel
+import com.example.mobileproject.viewmodel.SettingsViewModel
 import com.example.mobileproject.viewmodel.ShelfViewModel
 import com.example.mobileproject.viewmodel.ViewModelFactory
 
 @Composable
 fun AppNavHost(container: AppContainer) {
     val navController = rememberNavController()
+    val back: () -> Unit = { navController.popBackStack() }
 
     NavHost(
         navController = navController,
@@ -30,17 +33,21 @@ fun AppNavHost(container: AppContainer) {
             ShelfScreen(
                 viewModel = shelfViewModel,
                 onBookClick = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
-                onSearchClick = { navController.navigate(Screen.Search.route) }
+                onSearchClick = { navController.navigate(Screen.Search.route) },
+                onSettingsClick = { navController.navigate(Screen.Settings.route) }
             )
         }
 
         composable(Screen.Search.route) {
             val searchViewModel: SearchViewModel =
                 viewModel(factory = ViewModelFactory(container))
-            SearchScreen(
-                viewModel = searchViewModel,
-                onBack = { navController.popBackStack() }
-            )
+            SearchScreen(viewModel = searchViewModel, onBack = back)
+        }
+
+        composable(Screen.Settings.route) {
+            val settingsViewModel: SettingsViewModel =
+                viewModel(factory = ViewModelFactory(container))
+            SettingsScreen(viewModel = settingsViewModel, onBack = back)
         }
 
         composable(
@@ -50,10 +57,7 @@ fun AppNavHost(container: AppContainer) {
             val bookId = backStackEntry.arguments?.getString("bookId") ?: return@composable
             val detailViewModel: BookDetailViewModel =
                 viewModel(factory = ViewModelFactory(container, bookId))
-            BookDetailScreen(
-                viewModel = detailViewModel,
-                onBack = { navController.popBackStack() }
-            )
+            BookDetailScreen(viewModel = detailViewModel, onBack = back)
         }
     }
 }
