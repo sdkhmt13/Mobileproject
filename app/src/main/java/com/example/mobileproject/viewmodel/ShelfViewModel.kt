@@ -8,13 +8,15 @@ import com.example.mobileproject.data.ReadingStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class ShelfViewModel(private val repository: BookRepository) : ViewModel() {
 
     private val _filter = MutableStateFlow<ReadingStatus?>(null)
-    val filter: StateFlow<ReadingStatus?> = _filter
+    val filter: StateFlow<ReadingStatus?> = _filter.asStateFlow()
 
     val books: StateFlow<List<Book>> =
         combine(repository.shelf, _filter) { list, filter ->
@@ -25,8 +27,11 @@ class ShelfViewModel(private val repository: BookRepository) : ViewModel() {
         _filter.value = status
     }
 
-    fun changeStatus(id: String, status: ReadingStatus) =
-        repository.updateStatus(id, status)
+    fun changeStatus(id: String, status: ReadingStatus) {
+        viewModelScope.launch { repository.updateStatus(id, status) }
+    }
 
-    fun removeBook(id: String) = repository.removeBook(id)
+    fun removeBook(id: String) {
+        viewModelScope.launch { repository.removeBook(id) }
+    }
 }

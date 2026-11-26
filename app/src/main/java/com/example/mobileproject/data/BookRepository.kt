@@ -4,9 +4,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface BookRepository {
     val shelf: Flow<List<Book>>
-    suspend fun search(query: String): List<Book>
-    fun getBook(id: String): Book?
-    fun addBook(book: Book)
-    fun updateStatus(id: String, status: ReadingStatus)
-    fun removeBook(id: String)
+    fun observeBook(id: String): Flow<Book?>
+    suspend fun addBook(book: Book)
+    suspend fun updateStatus(id: String, status: ReadingStatus)
+    suspend fun removeBook(id: String)
 }
