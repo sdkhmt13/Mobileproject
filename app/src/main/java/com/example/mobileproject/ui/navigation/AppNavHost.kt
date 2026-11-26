@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.mobileproject.data.BookRepository
+import com.example.mobileproject.AppContainer
 import com.example.mobileproject.ui.screens.BookDetailScreen
 import com.example.mobileproject.ui.screens.SearchScreen
 import com.example.mobileproject.ui.screens.ShelfScreen
@@ -17,7 +17,7 @@ import com.example.mobileproject.viewmodel.ShelfViewModel
 import com.example.mobileproject.viewmodel.ViewModelFactory
 
 @Composable
-fun AppNavHost(repository: BookRepository) {
+fun AppNavHost(container: AppContainer) {
     val navController = rememberNavController()
 
     NavHost(
@@ -26,7 +26,7 @@ fun AppNavHost(repository: BookRepository) {
     ) {
         composable(Screen.Shelf.route) {
             val shelfViewModel: ShelfViewModel =
-                viewModel(factory = ViewModelFactory(repository))
+                viewModel(factory = ViewModelFactory(container))
             ShelfScreen(
                 viewModel = shelfViewModel,
                 onBookClick = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
@@ -36,7 +36,7 @@ fun AppNavHost(repository: BookRepository) {
 
         composable(Screen.Search.route) {
             val searchViewModel: SearchViewModel =
-                viewModel(factory = ViewModelFactory(repository))
+                viewModel(factory = ViewModelFactory(container))
             SearchScreen(
                 viewModel = searchViewModel,
                 onBack = { navController.popBackStack() }
@@ -49,7 +49,7 @@ fun AppNavHost(repository: BookRepository) {
         ) { backStackEntry ->
             val bookId = backStackEntry.arguments?.getString("bookId") ?: return@composable
             val detailViewModel: BookDetailViewModel =
-                viewModel(factory = ViewModelFactory(repository, bookId = bookId))
+                viewModel(factory = ViewModelFactory(container, bookId))
             BookDetailScreen(
                 viewModel = detailViewModel,
                 onBack = { navController.popBackStack() }
