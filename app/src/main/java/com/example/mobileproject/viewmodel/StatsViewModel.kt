@@ -1,7 +1,5 @@
 package com.example.mobileproject.viewmodel
 
-package com.example.mobileproject.viewmodel
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mobileproject.data.BookRepository
