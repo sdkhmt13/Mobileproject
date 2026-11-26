@@ -7,6 +7,7 @@ import com.example.mobileproject.data.local.AppDatabase
 import com.example.mobileproject.data.local.RoomBookRepository
 import com.example.mobileproject.data.remote.OpenLibraryBookSearchRepository
 import com.example.mobileproject.data.remote.RetrofitClient
+import com.example.mobileproject.data.settings.SettingsRepository
 
 class AppContainer(context: Context) {
 
@@ -18,5 +19,9 @@ class AppContainer(context: Context) {
 
     val searchRepository: BookSearchRepository by lazy {
         OpenLibraryBookSearchRepository(RetrofitClient.api)
+    }
+
+    val settingsRepository: SettingsRepository by lazy {
+        SettingsRepository(appContext)
     }
 }
