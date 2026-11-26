@@ -38,7 +38,9 @@ fun BookCard(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = book.title, style = MaterialTheme.typography.titleMedium)
+
                 Text(text = book.author, style = MaterialTheme.typography.bodyMedium)
+
                 if (showStatus) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(

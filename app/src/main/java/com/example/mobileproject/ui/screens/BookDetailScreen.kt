@@ -75,13 +75,17 @@ fun BookDetailScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(current.title, style = MaterialTheme.typography.headlineSmall)
+
                 Text(
                     current.author,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
                 Text(current.description, style = MaterialTheme.typography.bodyLarge)
+
                 Text("Status", style = MaterialTheme.typography.labelLarge)
+
                 StatusChips(
                     selected = current.status,
                     onSelect = { status -> status?.let { viewModel.changeStatus(it) } },
