@@ -9,7 +9,7 @@ class ViewModelFactory(
     private val bookId: String? = null
 ) : ViewModelProvider.Factory {
 
-    @Suppress("UNCHECKED_CAST")
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T = when {
         modelClass.isAssignableFrom(ShelfViewModel::class.java) ->
             ShelfViewModel(repository)
