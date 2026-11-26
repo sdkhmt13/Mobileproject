@@ -23,7 +23,10 @@ class BookDetailViewModel(
         viewModelScope.launch { repository.updateStatus(bookId, status) }
     }
 
-    fun remove() {
-        viewModelScope.launch { repository.removeBook(bookId) }
+    fun remove(onRemoved: () -> Unit) {
+        viewModelScope.launch {
+            repository.removeBook(bookId)
+            onRemoved()
+        }
     }
 }
