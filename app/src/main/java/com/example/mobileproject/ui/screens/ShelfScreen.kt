@@ -8,10 +8,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +35,10 @@ import com.example.mobileproject.viewmodel.ShelfViewModel
 fun ShelfScreen(
     viewModel: ShelfViewModel,
     onBookClick: (String) -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+    onStatsClick: () -> Unit,
+    onAddClick: () -> Unit
 ) {
     val books by viewModel.books.collectAsStateWithLifecycle()
     val filter by viewModel.filter.collectAsStateWithLifecycle()
@@ -39,12 +46,23 @@ fun ShelfScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("My Shelf") }
+                title = { Text("My Shelf") },
+                actions = {
+                    IconButton(onClick = onSearchClick) {
+                        Icon(Icons.Filled.Search, contentDescription = "Search books")
+                    }
+                    IconButton(onClick = onStatsClick) {
+                        Icon(Icons.Filled.Star, contentDescription = "Statistics")
+                    }
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(Icons.Filled.Settings, contentDescription = "Settings")
+                    }
+                }
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onSearchClick) {
-                Icon(Icons.Filled.Add, contentDescription = "Add book")
+            FloatingActionButton(onClick = onAddClick) {
+                Icon(Icons.Filled.Add, contentDescription = "Add book manually")
             }
         }
     ) { innerPadding ->

@@ -3,27 +3,37 @@ package com.example.mobileproject.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.mobileproject.ui.components.BookCover
 import com.example.mobileproject.ui.components.StatusChips
 import com.example.mobileproject.viewmodel.BookDetailViewModel
-import androidx.compose.material.icons.filled.Delete
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +42,7 @@ fun BookDetailScreen(
     onBack: () -> Unit
 ) {
     val book by viewModel.book.collectAsStateWithLifecycle()
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -44,10 +55,7 @@ fun BookDetailScreen(
                 },
                 actions = {
                     if (book != null) {
-                        IconButton(onClick = {
-                            viewModel.remove()
-                            onBack()
-                        }) {
+                        IconButton(onClick = { showDeleteDialog = true }) {
                             Icon(Icons.Filled.Delete, contentDescription = "Delete book")
                         }
                     }
@@ -71,16 +79,34 @@ fun BookDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                BookCover(
+                    url = current.coverUrl,
+                    title = current.title,
+                    modifier = Modifier
+                        .size(width = 120.dp, height = 180.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(current.title, style = MaterialTheme.typography.headlineSmall)
                 Text(
                     current.author,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Text(current.description, style = MaterialTheme.typography.bodyLarge)
+                current.year?.let { year ->
+                    Text(
+                        "First published: $year",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                if (current.description.isNotBlank()) {
+                    Text(current.description, style = MaterialTheme.typography.bodyLarge)
+                }
                 Text("Status", style = MaterialTheme.typography.labelLarge)
                 StatusChips(
                     selected = current.status,
@@ -89,5 +115,22 @@ fun BookDetailScreen(
                 )
             }
         }
+    }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Delete book?") },
+            text = { Text("\"${book?.title}\" will be removed from your shelf.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    viewModel.remove(onRemoved = onBack)
+                }) { Text("Delete") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) { Text("Cancel") }
+            }
+        )
     }
 }

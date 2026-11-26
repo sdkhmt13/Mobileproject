@@ -17,6 +17,12 @@ class ViewModelFactory(
             SearchViewModel(container.searchRepository, container.bookRepository)
         modelClass.isAssignableFrom(BookDetailViewModel::class.java) ->
             BookDetailViewModel(container.bookRepository, requireNotNull(bookId))
+        modelClass.isAssignableFrom(SettingsViewModel::class.java) ->
+            SettingsViewModel(container.settingsRepository)
+        modelClass.isAssignableFrom(StatsViewModel::class.java) ->
+            StatsViewModel(container.bookRepository)
+        modelClass.isAssignableFrom(AddBookViewModel::class.java) ->
+            AddBookViewModel(container.bookRepository)
         else -> throw IllegalArgumentException("Unknown ViewModel: $modelClass")
     } as T
 }
