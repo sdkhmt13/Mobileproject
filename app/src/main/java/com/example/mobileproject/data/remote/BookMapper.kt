@@ -8,11 +8,13 @@ fun BookDocDto.coverUrl(): String? =
     coverId?.let { "$COVERS_BASE_URL$it-M.jpg" }
 
 fun BookDocDto.toBook(): Book? {
-    val bookId = key ?: return null
+    val bookId = key?.substringAfterLast('/') ?: return null
     val bookTitle = title ?: return null
     return Book(
         id = bookId,
         title = bookTitle,
-        author = authorNames?.firstOrNull() ?: "Unknown author"
+        author = authorNames?.firstOrNull() ?: "Unknown author",
+        coverUrl = coverUrl(),
+        year = firstPublishYear
     )
 }
