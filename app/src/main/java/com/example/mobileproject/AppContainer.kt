@@ -3,9 +3,10 @@ package com.example.mobileproject
 import android.content.Context
 import com.example.mobileproject.data.BookRepository
 import com.example.mobileproject.data.BookSearchRepository
-import com.example.mobileproject.data.FakeBookSearchRepository
 import com.example.mobileproject.data.local.AppDatabase
 import com.example.mobileproject.data.local.RoomBookRepository
+import com.example.mobileproject.data.remote.OpenLibraryBookSearchRepository
+import com.example.mobileproject.data.remote.RetrofitClient
 
 class AppContainer(context: Context) {
 
@@ -16,6 +17,6 @@ class AppContainer(context: Context) {
     }
 
     val searchRepository: BookSearchRepository by lazy {
-        FakeBookSearchRepository()
+        OpenLibraryBookSearchRepository(RetrofitClient.api)
     }
 }
