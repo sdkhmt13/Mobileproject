@@ -16,19 +16,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val container = (application as BookTrackerApplication).container
         setContent {
             MobileprojectTheme {
-                AppNavHost(repository = AppContainer.repository)
+                AppNavHost(container = container)
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AppPreview() {
-    MobileprojectTheme {
-        AppNavHost(repository = InMemoryBookRepository())
     }
 }
 

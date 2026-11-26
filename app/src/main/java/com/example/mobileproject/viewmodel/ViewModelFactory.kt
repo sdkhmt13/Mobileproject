@@ -2,24 +2,21 @@ package com.example.mobileproject.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.mobileproject.data.BookRepository
-import com.example.mobileproject.data.BookSearchRepository
-import com.example.mobileproject.data.FakeBookSearchRepository
+import com.example.mobileproject.AppContainer
 
 class ViewModelFactory(
-    private val repository: BookRepository,
-    private val searchRepository: BookSearchRepository = FakeBookSearchRepository(),
+    private val container: AppContainer,
     private val bookId: String? = null
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T = when {
         modelClass.isAssignableFrom(ShelfViewModel::class.java) ->
-            ShelfViewModel(repository)
+            ShelfViewModel(container.bookRepository)
         modelClass.isAssignableFrom(SearchViewModel::class.java) ->
-            SearchViewModel(searchRepository, repository)
+            SearchViewModel(container.searchRepository, container.bookRepository)
         modelClass.isAssignableFrom(BookDetailViewModel::class.java) ->
-            BookDetailViewModel(repository, requireNotNull(bookId))
+            BookDetailViewModel(container.bookRepository, requireNotNull(bookId))
         else -> throw IllegalArgumentException("Unknown ViewModel: $modelClass")
     } as T
 }
