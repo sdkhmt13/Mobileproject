@@ -72,4 +72,9 @@ dependencies {
     ksp("androidx.room:room-compiler:2.8.4")
     androidTestImplementation("androidx.room:room-testing:2.8.4")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+
+
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
 }
