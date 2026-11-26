@@ -5,5 +5,7 @@ data class Book(
     val title: String,
     val author: String,
     val description: String = "",
-    val status: ReadingStatus = ReadingStatus.WANT
+    val status: ReadingStatus = ReadingStatus.WANT,
+    val coverUrl: String? = null,
+    val year: Int? = null
 )

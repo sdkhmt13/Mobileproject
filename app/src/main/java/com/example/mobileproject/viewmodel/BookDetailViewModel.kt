@@ -1,24 +1,29 @@
 package com.example.mobileproject.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mobileproject.data.Book
 import com.example.mobileproject.data.BookRepository
 import com.example.mobileproject.data.ReadingStatus
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class BookDetailViewModel(
     private val repository: BookRepository,
     private val bookId: String
 ) : ViewModel() {
 
-    private val _book = MutableStateFlow(repository.getBook(bookId))
-    val book: StateFlow<Book?> = _book
+
+    val book: StateFlow<Book?> = repository.observeBook(bookId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun changeStatus(status: ReadingStatus) {
-        repository.updateStatus(bookId, status)
-        _book.value = repository.getBook(bookId)
+        viewModelScope.launch { repository.updateStatus(bookId, status) }
     }
 
-    fun remove() = repository.removeBook(bookId)
+    fun remove() {
+        viewModelScope.launch { repository.removeBook(bookId) }
+    }
 }

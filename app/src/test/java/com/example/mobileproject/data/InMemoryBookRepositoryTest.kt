@@ -37,24 +37,23 @@ class InMemoryBookRepositoryTest {
     @Test
     fun updateStatus_changesStatusOfBook() = runTest {
         repo.updateStatus("1", ReadingStatus.DONE)
-        assertEquals(ReadingStatus.DONE, repo.getBook("1")?.status)
+        assertEquals(ReadingStatus.DONE, repo.observeBook("1").first()?.status)
     }
 
     @Test
     fun removeBook_removesFromShelf() = runTest {
         repo.removeBook("1")
-        assertNull(repo.shelf.first().find { it.id == "1" })
+        assertNull(repo.observeBook("1").first())
     }
 
     @Test
-    fun search_findsByTitleIgnoringCase() = runTest {
-        val results = repo.search("hobbit")
-        assertEquals(1, results.size)
-        assertEquals("The Hobbit", results.first().title)
+    fun fakeSearch_findsByTitleIgnoringCase() = runTest {
+        val results = FakeBookSearchRepository().search("hobbit")
+        assertEquals("The Hobbit", results.single().title)
     }
 
     @Test
-    fun search_blankQueryReturnsEmptyList() = runTest {
-        assertTrue(repo.search("  ").isEmpty())
+    fun fakeSearch_blankQueryReturnsEmptyList() = runTest {
+        assertTrue(FakeBookSearchRepository().search("  ").isEmpty())
     }
 }
